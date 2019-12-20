@@ -2,7 +2,7 @@ import torch
 import random
 import torch.nn as nn
 import torch.nn.functional as F
-from otrans.utils import get_dec_seq_mask, get_seq_mask, get_length_mask
+from otrans.utils import get_seq_mask, get_dec_seq_mask
 from otrans.module import LayerNorm, PositionalEncoding
 from otrans.layer import TransformerDecoderLayer, TransformerEncoderLayer
 
@@ -31,7 +31,7 @@ class TransformerDecoder(nn.Module):
 
         if share_embedding:
             assert self.embedding.weight.size() == self.output_layer.weight.size()
-            self.embedding.weight = self.output_layer.weight
+            self.output_layer.weight = self.embedding.weight
 
     def forward(self, targets, target_length, memory, memory_mask):
 
@@ -52,7 +52,7 @@ class TransformerDecoder(nn.Module):
 
     def recognize(self, preds, memory, memory_mask, last=True):
 
-        dec_output = self.embed(preds)
+        dec_output = self.embedding(preds)
         dec_mask = get_seq_mask(preds)
 
         for _, block in enumerate(self.blocks):
