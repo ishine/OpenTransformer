@@ -10,7 +10,7 @@ data:
   num_mel_bins: 40
   apply_cmvn: False
   normalization: True
-  spec_argument: True
+  spec_augment: True
   left_frames: 0
   right_frames: 0
   skip_frames: 0
@@ -19,7 +19,7 @@ data:
 model:
   # network architecture
   type: transformer
-  d_model: 256
+  d_model: 320
   normalize_before: False
   concat_after: False
   # dropout
@@ -31,12 +31,12 @@ model:
   # encoder related
   feat_dim: 40
   num_enc_blocks: 6
-  enc_ffn_units: 1024
+  enc_ffn_units: 1280
   enc_input_layer: conv2d
   # decoder related
   vocab_size: 4233
   num_dec_blocks: 6
-  dec_ffn_units: 1024
+  dec_ffn_units: 1280
   # attention related
   n_heads: 4
   # label smoothing
@@ -50,8 +50,8 @@ train:
   shuffle: True
   lr: 1.0
   clip_grad: 5
-  epochs: 5
-  accum_steps: 1
+  epochs: 80
+  accum_steps: 4
   grad_noise: False
   load_model: False
   save_name: transformer

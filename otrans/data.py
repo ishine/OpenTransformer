@@ -1,5 +1,13 @@
+"""
+@Author: Zhengkun Tian
+@Email: zhengkun.tian@outlook.com
+@Date: 2020-04-23 15:14:28
+@LastEditTime: 2020-04-23 15:16:49
+@FilePath: \OpenTransformer\otrans\data.py
+"""
 import os
 import torch
+import random
 import kaldiio as kio
 import numpy as np
 import torchaudio as ta
@@ -139,8 +147,8 @@ class AudioDataset(Dataset):
                     self.cmvns[spk_id] = path
                 print('Load CMVN Stats')
 
-        if self.params['spec_argument']:
-            print('Apply SpecArgument!')
+        if self.params['spec_augment']:
+            print('Apply SpecAugment!')
 
     def __getitem__(self, index):
         utt_id, path = self.file_list[index]

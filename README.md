@@ -1,6 +1,7 @@
 # OpenTransformer
 
 This is a speech-transformer model for end-to-end speech recognition.
+If you have any questions, please email to me. (zhengkun.tian@nlpr.ia.ac.cn)
 
 # Requirements
 Pytorch >= 1.2.0
@@ -80,7 +81,7 @@ OMP_NUM_THREADS=1 python -m torch.distributed.launch --nproc_per_node=2 run.py -
 
 ## Average the parameters of the last N epochs
 ```python
-python tools/average.py you_model_expdir 50 59    #   average the models from 50-th epoch to 59-th epoch
+python tools/average.py your_model_expdir 50 59    #   average the models from 50-th epoch to 59-th epoch
 ```
 
 ## Eval
@@ -89,7 +90,7 @@ python eval.py -m model.pt
 ```
 
 ## Experiments
-Our Model can achieve a CER of 7.1% without CMVN, any external LM and joint-CTC training on [AISHELL-1](http://www.openslr.org/33/), which is better than 7.5% of Chain Model in Kaldi.
+Our Model can achieve a CER of 6.7% without CMVN, any external LM and joint-CTC training on [AISHELL-1](http://www.openslr.org/33/), which is better than 7.4% of Chain Model in Kaldi.
 
 ## Acknowledge
 OpenTransformer refer to [ESPNET](https://github.com/espnet/espnet).
