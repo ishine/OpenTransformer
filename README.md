@@ -18,7 +18,7 @@ Torchaudio >= 0.3.0
 
 - Data Augmentation([SpecAugument](https://arxiv.org/abs/1904.08779))
 
-- Extract Fbank features in a online funshion
+- Extract Fbank features in a online fashion
 
 - Visualization based Tensorboard
 
@@ -67,7 +67,7 @@ BAC009S0764W0139 /data/aishell/wav/BAC009S0764W0139.wav
 ## Train
 - Single GPU
 ```python
-python rnn.py -c egs/aishell/conf/transformer.yaml
+python run.py -c egs/aishell/conf/transformer.yaml
 ```
 - Multi GPU Training based DataParallel
 ```python

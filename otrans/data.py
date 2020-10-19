@@ -44,31 +44,39 @@ def apply_cmvn(mat, stats):
     return np.divide(np.subtract(mat, mean), np.sqrt(variance))
 
 
-def spec_augment(mel_spectrogram, frequency_mask_num=2, time_mask_num=2,
-                 frequency_masking_para=5, time_masking_para=15):
+def spec_augment(
+    mel_spectrogram,
+    freq_mask_num=2,
+    time_mask_num=2,
+    freq_mask_rate=0.3,
+    time_mask_rate=0.05,
+    max_mask_time_len=100):
+
     tau = mel_spectrogram.shape[0]
     v = mel_spectrogram.shape[1]
 
     warped_mel_spectrogram = mel_spectrogram
 
+    freq_masking_para = int(v * freq_mask_rate)
+    time_masking_para = min(int(tau * time_mask_rate), max_mask_time_len)
+
     # Step 1 : Frequency masking
-    if frequency_mask_num > 0:
-        for i in range(frequency_mask_num):
-            f = np.random.uniform(low=0.0, high=frequency_masking_para)
+    if freq_mask_num > 0:
+        for _ in range(freq_mask_num):
+            f = np.random.uniform(low=0.0, high=freq_masking_para)
             f = int(f)
             f0 = random.randint(0, v-f)
             warped_mel_spectrogram[:, f0:f0+f] = 0
 
     # Step 2 : Time masking
     if time_mask_num > 0:
-        for i in range(time_mask_num):
+        for _ in range(time_mask_num):
             t = np.random.uniform(low=0.0, high=time_masking_para)
             t = int(t)
             t0 = random.randint(0, tau-t)
             warped_mel_spectrogram[t0:t0+t, :] = 0
 
     return warped_mel_spectrogram
-
 
 class AudioDataset(Dataset):
     def __init__(self, params, name='train', is_eval=False):
@@ -233,7 +241,7 @@ class TextDataset(Dataset):
                 utt_id = parts[0]
                 label = []
                 for c in parts[1:]:
-                    label.append(self.src_unit2idx[c] if c in self.unit2idx else self.unit2idx['<UNK>'])
+                    label.append(self.unit2idx[c] if c in self.unit2idx else self.unit2idx['<UNK>'])
                 self.text_list.append((utt_id, label))
 
         self.lengths = len(self.text_list)
@@ -293,6 +301,7 @@ class FeatureLoader(object):
         self.shuffle = False if is_eval else shuffle
 
         self.dataset_type = params['data']['dataset_type']   # text, online, espnet
+        self.batch_size = params['data']['batch_size']
 
         if self.dataset_type == 'text':
             self.dataset = TextDataset(params['data'], name, is_eval=is_eval)
